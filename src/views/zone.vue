@@ -103,6 +103,7 @@ export default {
   created() {
     this.$api.zoneApi.getdefaultZone().then((resp) => {
       this.zoneInfo.zoneId = resp.data.zoneId;
+      // console.log("空间" + this.zoneInfo.zoneId);
       this.zoneInfo.zoneName = resp.data.zoneName;
       this.getRootContainer();
       this.newContainer.zoneId = this.zoneInfo.zoneId;

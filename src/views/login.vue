@@ -35,9 +35,6 @@
 import router from "@/router/router";
 
 export default {
-  created() {
-    localStorage.removeItem("authToken");
-  },
   data() {
     return {
       loginForm: {

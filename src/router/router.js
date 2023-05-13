@@ -52,14 +52,16 @@ const routes = [
         name: 'container',
         path: '/container/:cid',
         component: () => import('../views/container'),
-        // children: [
-        //     {
-        //         path: ':cid',
-        //         component: () => import('../views/container'),
-        //     },
-        // ],
         meta: {
             title: '容器详情'
+        }
+    },
+    {
+
+        path: '/item',
+        component: () => import('../views/item'),
+        meta: {
+            title: '物品添加页'
         }
     },
 ]

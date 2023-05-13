@@ -11,17 +11,36 @@
       }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- 添加本层物品 -->
-      <v-btn icon>
-        <v-icon> mdi-view-grid-plus-outline </v-icon>
-      </v-btn>
+      <v-menu left offset-y rounded="lg">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon> mdi-view-grid-plus-outline </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-text class="text-center">添加物品</v-card-text>
+
+          <div><v-btn text color="brown lighten-1">手动添加</v-btn></div>
+          <div><v-btn text color="brown lighten-1">扫码识别</v-btn></div>
+          <div><v-btn text color="brown lighten-1">在线链接</v-btn></div>
+        </v-card>
+      </v-menu>
       <!-- 添加子容器 -->
       <v-btn icon>
         <v-icon> mdi-package-variant-closed-plus </v-icon>
       </v-btn>
       <!-- 修改容器资料 -->
-      <v-btn icon>
-        <v-icon> mdi-cog-outline </v-icon>
-      </v-btn>
+      <v-menu left offset-y rounded="lg">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon> mdi-cog-outline </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <div><v-btn text color="brown lighten-1">编辑容器</v-btn></div>
+          <div><v-btn text color="brown lighten-1">删除容器</v-btn></div>
+        </v-card>
+      </v-menu>
     </v-toolbar>
 
     <!-- 路径 -->
@@ -151,8 +170,9 @@ export default {
    * 之后的路由跳转不会重新渲染组件
    */
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       this.cid = to.params.cid;
+      layer: "true";
       this.getContainerInfo();
       this.getChildContaier();
     },

@@ -91,7 +91,7 @@ export default {
     signIn() {
       this.$api.userApi.signin(this.signForm).then((resp) => {
         if (resp.code == 1000) {
-          router.push("/login");
+          this.$router.push("/login");
           this.$notify({
             message: "欢迎登录",
             offset: 115,
