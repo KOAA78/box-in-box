@@ -6,8 +6,15 @@
       <v-btn icon to="/zone">
         <v-icon> mdi-arrow-left </v-icon>
       </v-btn>
-      <v-toolbar-title class="container-title flex text-center">厨房</v-toolbar-title>
-      <!-- 添加物品 -->
+      <v-toolbar-title class="container-title">{{
+        containerInfo.containerName
+      }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <!-- 添加本层物品 -->
+      <v-btn icon>
+        <v-icon> mdi-view-grid-plus-outline </v-icon>
+      </v-btn>
+      <!-- 添加子容器 -->
       <v-btn icon>
         <v-icon> mdi-package-variant-closed-plus </v-icon>
       </v-btn>
@@ -18,34 +25,53 @@
     </v-toolbar>
 
     <!-- 路径 -->
-    <v-breadcrumbs :items="items">
-      <template v-slot:item="{ item }">
-        <v-breadcrumbs-item :disabled="item.disabled">
-          <span :style="`color: ${item.color}`">
-            {{ item.text }}
-          </span>
-        </v-breadcrumbs-item>
-      </template>
-    </v-breadcrumbs>
+    <v-breadcrumbs :items="paths"></v-breadcrumbs>
 
     <div class="container-box">
       <!-- 容器封面 -->
-      <img
-        src="https://s2.loli.net/2023/05/10/ClnFa6mftGWUqk3.png"
-        class="container-img"
-      />
+      <img :src="containerInfo.containerImg" class="container-img" />
       <!-- 切换栏 -->
-      <v-bottom-navigation
-        class="change-nav"
-        height="45px"
-        color="brown darken-4"
-      >
-        <v-btn class="rounded-pill"> <span>本层物品</span> </v-btn>
-        <v-btn class="rounded-pill"> <span>子容器</span> </v-btn>
-      </v-bottom-navigation>
+      <v-tabs color="brown" centered class="change-nav">
+        <v-tab @click="layer = true">本层物品</v-tab>
+        <v-tab @click="layer = false">子容器</v-tab>
+      </v-tabs>
 
       <!-- 具体子项 -->
-      <v-card outlined class="list-box"> </v-card>
+      <v-card outlined class="list-box">
+        <!-- 本层物品 -->
+        <v-list rounded v-if="layer">
+          <v-row class="pa-3">
+            <v-col v-for="card in items" :key="card.title" :cols="6">
+              <v-card>
+                <v-img
+                  :src="card.itemImg"
+                  class="white--text align-end"
+                  height="125px"
+                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.3)"
+                >
+                  <v-card-title>{{ card.itemName }}</v-card-title>
+                </v-img>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-list>
+        <!-- 子容器 -->
+        <v-list rounded v-else>
+          <v-list-item
+            v-for="child in childContainers"
+            :key="child.containerId"
+            link
+            @click="enterChild(child.containerId)"
+          >
+            <v-list-item-icon>
+              <v-icon :color="child.dotColor">mdi-circle</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              {{ child.containerName }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-card>
     </div>
   </div>
 </template>
@@ -54,22 +80,82 @@
 export default {
   data() {
     return {
-      items: [
+      cid: this.$route.params.cid,
+      layer: "true",
+      paths: [
         {
           text: "厨房",
-          href: "breadcrumbs_dashboard",
+          // href: "breadcrumbs_dashboard",
         },
         {
           text: "冰箱",
-          href: "breadcrumbs_link_1",
+          // href: "breadcrumbs_link_1",
+        },
+      ],
+      containerInfo: {
+        containerName: "",
+        containerImg: "",
+      },
+      childContainers: [
+        {
+          containerId: "",
+          containerName: "",
+          dotColor: "",
+        },
+      ],
+      items: [
+        {
+          itemId: "",
+          itemName: "冰淇淋",
+          itemImg: "https://s2.loli.net/2023/05/11/Mn1pkWLoIVlda8j.png",
         },
         {
-          text: "第一层",
-          href: "breadcrumbs_link_2",
-          color: "Sienna",
+          itemId: "",
+          itemName: "土豆",
+          itemImg: "https://s2.loli.net/2023/05/11/8TRMiqFdtVkaK2b.jpg",
         },
       ],
     };
+  },
+
+  created() {
+    this.getContainerInfo();
+    this.getChildContaier();
+  },
+
+  methods: {
+    getContainerInfo() {
+      this.$api.containerApi.getContainerById(this.cid).then((resp) => {
+        this.containerInfo = resp.data;
+      });
+    },
+    getChildContaier() {
+      this.$api.containerApi.getChildContainer(this.cid).then((resp) => {
+        this.childContainers = resp.data;
+      });
+    },
+    getItem() {},
+    enterChild(containerId) {
+      this.$router.push({
+        name: "container",
+        params: {
+          cid: containerId,
+        },
+      });
+    },
+  },
+
+  /* NOTE:
+   * Vue路由采用的是单页应用的方式，
+   * 只有第一次进入时才会触发created()方法，
+   * 之后的路由跳转不会重新渲染组件
+   */
+  watch: {
+    '$route'(to, from) {
+      this.cid = to.params.cid;
+      this.getContainerInfo();
+      this.getChildContaier();
+    },
   },
 };
 </script>
@@ -80,12 +166,13 @@ export default {
   width: 100vw;
   background: rgb(241, 240, 240);
 }
+
 .container-title {
   color: white;
   letter-spacing: 8px;
   font-size: 20px;
   position: relative;
-  left: 15px;
+  /* left: 25px; */
 }
 
 .container-img {
@@ -114,6 +201,7 @@ export default {
   font-size: 17px;
 }
 
+/* FIX: 列表太长底部留白 */
 .list-box {
   background-color: #ffffff;
   width: 325px;
@@ -122,6 +210,5 @@ export default {
   transform: translate(-50%, 0%);
   left: 50%;
   top: 35px;
-  border-radius: 15px;
 }
 </style>

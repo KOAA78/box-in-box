@@ -24,7 +24,7 @@
     </div>
     <img src="../assets/img/box_pro.png" class="deco-box" />
 
-    <!-- FIXME：直接移到我的设置 -->
+    <!-- todo：直接移到我的设置 -->
     <!-- <div class="logout-btn">
       <v-btn block @click="logout">
         <v-icon left> mdi-power </v-icon>退出登录

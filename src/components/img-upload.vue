@@ -1,20 +1,25 @@
 <!--
- * @Descripttion: 封装 elementUi 上传图片组件
+ * @Descripttion: 封装上传图片预览组件
  * @Author: Rui Lin
  * @Date: 2023-05-10 23:36:13
 -->
 <template>
-  <div class="uploader-view">
-    <el-upload
-      action="fake"
-      :show-file-list="false"
-      :before-upload="beforeUpload"
-      :http-request="uploadImg"
-      v-loading="loading"
-    >
-      <img v-if="imgSrc" :src="imgSrc" />
-      <i v-else class="el-icon-picture-outline uploader-icon"></i>
-    </el-upload>
+  <div class="upload-container">
+    <div class="inner-container">
+      <input
+        type="file"
+        ref="fileInput"
+        style="display: none"
+        @change="handleFileChange"
+      />
+      <div class="logo-container" @click="openFilePicker">
+        <img v-if="imageUrl" :src="imageUrl" class="preview-image" />
+        <!-- 可以替换为其他框架的logo -->
+        <v-icon v-else color="brown lighten-3" large
+          >mdi-image-plus-outline</v-icon
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,61 +28,64 @@ export default {
   name: "img-upload",
   data() {
     return {
-      imgSrc: "",
-      loading: false,
+      imageUrl: "",
     };
   },
   methods: {
-    beforeUpload(file) {
-      const isJPG =
-        file.type === "image/png" ||
-        file.type === "image/jpg" ||
-        file.type === "image/jpeg";
-      if (!isJPG) {
-        this.$notify.warning("只能上传图片");
-      }
-      return isJPG;
+    handleFileChange(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        this.imageUrl = e.target.result;
+        // 
+        this.$emit("change", file);
+      };
     },
-    uploadImg(object) {
-      let formData = new FormData();
-      formData.append("smfile", object.file);
-      this.loading = true;
-      this.$api.otherApi.getImgUrl(formData).then((resp) => {
-        this.imgSrc = resp.data.url;
-        this.loading = false;
-        this.$emit("change", this.imgSrc);
-      });
+    openFilePicker() {
+      this.$refs.fileInput.click();
     },
   },
 };
 </script>
 
-<style  scoped>
-.uploader-view {
+<style>
+.upload-container {
   position: relative;
-  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px dashed rgb(193, 175, 165);
+}
+.inner-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.logo-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-image {
+  position: absolute;
+  top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   width: 200px;
   height: 200px;
-}
-
-.uploader-view img {
   object-fit: cover;
-  width: 200px;
-  height: 200px;
   border-radius: 10px;
-  border: 2px dashed rgb(193, 175, 165);
-  border-radius: 10px;
-}
-
-.uploader-icon {
-  font-size: 40px;
-  color: #b0a397;
-  line-height: 187px;
-  text-align: center;
-  border: 2px dashed rgb(193, 175, 165);
-  border-radius: 10px;
-  width: 200px;
-  height: 200px;
 }
 </style>

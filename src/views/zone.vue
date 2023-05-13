@@ -11,15 +11,17 @@
         </v-btn>
       </div>
     </div>
+    <!-- 根容器列表 -->
     <div class="mx-auto zone-container">
       <v-row>
-        <v-col v-for="card in containers" :key="card.title" :cols="6">
+        <v-col v-for="card in containers" :key="card.containerId" :cols="6">
           <v-card>
             <v-img
               :src="card.containerImg"
               class="white--text align-end"
               height="150px"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.3)"
+              @click="enterContanier(card.containerId)"
             >
               <v-card-title>{{ card.containerName }}</v-card-title>
             </v-img>
@@ -47,7 +49,7 @@
         >
           <h3>添加新容器</h3>
           <v-btn plain class="confirm-btn" @click="addContainer"> 确定 </v-btn>
-          <!-- FIXME: 添加非空判断 -->
+          <!-- FIX: 添加非空判断 -->
           <v-text-field
             label="容器名称"
             color="brown"
@@ -65,13 +67,37 @@
 </template>
 
 <script>
+import router from "@/router/router";
 import bottNav from "../components/bottom-nav.vue";
 import imgUpload from "../components/img-upload.vue";
+
+var formData = new FormData();
 
 export default {
   components: {
     bottNav,
     imgUpload,
+  },
+  data() {
+    return {
+      sheet: false,
+      zoneInfo: {
+        zoneId: "",
+        zoneName: "",
+      },
+      containers: [
+        {
+          containerId: "",
+          containersName: "",
+          containerImg: "",
+        },
+      ],
+      formDate: "",
+      newContainer: {
+        containerName: "",
+        containerImg: "",
+      },
+    };
   },
 
   created() {
@@ -79,29 +105,8 @@ export default {
       this.zoneInfo.zoneId = resp.data.zoneId;
       this.zoneInfo.zoneName = resp.data.zoneName;
       this.getRootContainer();
+      this.newContainer.zoneId = this.zoneInfo.zoneId;
     });
-  },
-
-  data() {
-    return {
-      sheet: false,
-
-      zoneInfo: {
-        zoneId: "",
-        zoneName: "",
-      },
-      containers: [
-        {
-          containerId:"",
-          containersName: "",
-          containerImg: "",
-        },
-      ],
-      newContainer: {
-        containerName: "",
-        containerImg: "",
-      },
-    };
   },
 
   methods: {
@@ -113,14 +118,29 @@ export default {
         });
     },
     getImgUrl(imgSrc) {
-      this.newContainer.containerImg = imgSrc;
+      formData.append("smfile", imgSrc);
+      // console.log(formData.get("smfile"))
     },
 
     addContainer() {
-      this.newContainer.zoneId = this.zoneInfo.zoneId;
-      this.$api.containerApi
-        .addContainer(this.newContainer)
-        .then((this.sheet = false), this.getRootContainer());
+      this.$api.otherApi.getImgUrl(formData).then((resp) => {
+        // TODO: 图床反应太慢，增加loading功能
+        this.newContainer.containerImg = resp.data.url;
+        this.$api.containerApi.addContainer(this.newContainer).then((resp) => {
+          this.getRootContainer();
+          this.sheet = false;
+        });
+      });
+    },
+
+    //FiX: 假设用户输入某个不属于它的容器Id，是否也能进入？
+    enterContanier(containerId) {
+      router.push({
+        name: "container",
+        params: {
+          cid: containerId,
+        },
+      });
     },
   },
 };
@@ -202,6 +222,8 @@ export default {
 
 .img-upload {
   position: relative;
-  top: 115px;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

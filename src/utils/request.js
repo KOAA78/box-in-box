@@ -47,7 +47,7 @@ instance.interceptors.response.use(response => {
     let code = error.code
     switch (code) {
       default:
-        //FIXME: 消息弹出位置修改（不同屏幕适配失败？）
+        //FIX: 消息弹出位置修改（不同屏幕适配失败？）
         Notification({
           message: "网络错误",
           offset: 115,

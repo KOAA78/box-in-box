@@ -9,49 +9,55 @@ const routes = [
         redirect: 'login'
     },
     {
-        path: '/test',
         name: 'test',
+        path: '/test',
         component: () => import('../views/test'),
         meta: {
             title: '测试页面'
         }
     },
     {
-        path: '/signin',
         name: 'signin',
+        path: '/signin',
         component: () => import('../views/signin'),
         meta: {
             title: '用户注册'
         }
     },
     {
-        path: '/login',
         name: 'login',
+        path: '/login',
         component: () => import('../views/login'),
         meta: {
             title: '用户登录'
         }
     },
     {
-        path: '/profile',
         name: 'profile',
+        path: '/profile',
         component: () => import('../views/profile'),
         meta: {
             title: '个人中心'
         }
     },
     {
-        path: '/zone',
         name: 'zone',
+        path: '/zone',
         component: () => import('../views/zone'),
         meta: {
             title: '我的空间'
         }
     },
     {
-        path: '/container',
         name: 'container',
+        path: '/container/:cid',
         component: () => import('../views/container'),
+        // children: [
+        //     {
+        //         path: ':cid',
+        //         component: () => import('../views/container'),
+        //     },
+        // ],
         meta: {
             title: '容器详情'
         }
@@ -63,7 +69,7 @@ const router = new VueRouter({
     mode: 'history'
 })
 
-// FIXME: 全局路由守卫
+// FIX: 全局路由守卫
 // router.beforeEach((to, from, next) => {
 //     const isLoggedIn = localStorage.getItem('authToken')
 //     // 如果用户已登录（或者前往的是登录或注册页面），则允许访问
