@@ -5,7 +5,7 @@
 -->
 <template>
   <v-app>
-    <router-view v-if="isRouterAlive"></router-view>
+    <router-view v-if="isRouterAlive" ></router-view>
   </v-app>
 </template>
 <script>

@@ -20,7 +20,7 @@
         <v-card>
           <v-card-text class="text-center">添加物品</v-card-text>
 
-          <div><v-btn text color="brown lighten-1">手动添加</v-btn></div>
+          <div><v-btn text color="brown lighten-1" to="/item">手动添加</v-btn></div>
           <div><v-btn text color="brown lighten-1">扫码识别</v-btn></div>
           <div><v-btn text color="brown lighten-1">在线链接</v-btn></div>
         </v-card>

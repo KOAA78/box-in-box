@@ -12,25 +12,29 @@
         <span class="user-name">{{ userInfo.userName }}</span>
       </div>
     </div>
+
     <div class="user-operation">
       <div class="user-setting">
-        <v-icon>mdi-cog-outline</v-icon>
-        <span>我的设置</span>
+        <router-link to="/setting">
+          <v-icon>mdi-cog-outline</v-icon>
+          <span>我的设置</span>
+        </router-link>
       </div>
+
+      
       <div class="user-setting">
-        <v-icon>mdi-sofa-outline</v-icon>
-        <span>收纳管理</span>
+        <router-link to="/manage">
+          <v-icon>mdi-sofa-outline</v-icon><span>空间管理</span>
+        </router-link>
+      </div>
+
+      <div class="user-setting">
+        <router-link to="/category">
+          <v-icon>mdi-tag-outline</v-icon><span>种类管理</span>
+        </router-link>
       </div>
     </div>
     <img src="../assets/img/box_pro.png" class="deco-box" />
-
-    <!-- todo：直接移到我的设置 -->
-    <!-- <div class="logout-btn">
-      <v-btn block @click="logout">
-        <v-icon left> mdi-power </v-icon>退出登录
-      </v-btn>
-    </div> -->
-
     <bott-nav></bott-nav>
   </div>
 </template>
@@ -126,7 +130,7 @@ export default {
 }
 
 .user-operation {
-  height: 14vh;
+  height: 20vh;
   width: 80vw;
   background: rgb(245, 240, 235);
   box-shadow: 2px 2px 10px 1px rgb(210, 210, 208);
@@ -146,18 +150,14 @@ export default {
   color: rgb(79, 62, 55);
   letter-spacing: 2px;
   font-size: 18px;
+  position: relative;
+  top: 2px;
 }
 
 .deco-box {
   position: relative;
-  top: 325px;
+  top: 275px;
   left: 65px;
 }
 
-.logout-btn {
-  width: 80vw;
-  color: rgba(73, 62, 53, 0.748);
-  position: relative;
-  top: 400px;
-}
 </style>

@@ -36,7 +36,14 @@ Vue.prototype.$api = api
 Vue.prototype.$notify = Notification;
 
 Vue.use(VueAxios, axios)
+
 Vue.use(VueRouter)
+const originalPush = VueRouter.prototype.push
+//NOTE: 解决子路由无法跳转
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
 Vue.use(vuetify)
 Vue.use(VuetifyDialog, {
   context: {

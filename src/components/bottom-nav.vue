@@ -1,14 +1,19 @@
+<!--
+ * @Descripttion: 导航栏
+ * @Author: Rui Lin
+ * @Date: 2023-04-30 22:03:24
+-->
 <template>
   <div class="nav-view">
     <v-layout class="bott-nav">
       <v-bottom-navigation color="brown lighten-3" height="72" mode="shift" grow fixed>
         <v-btn to="/zone">
           <span>首页</span>
-          <v-icon>mdi-home-search-outline</v-icon>
-        </v-btn>
-        <v-btn>
-          <span>应用</span>
           <v-icon>mdi-package-variant-closed</v-icon>
+        </v-btn>
+        <v-btn to="/application">
+          <span>应用</span>
+          <v-icon>mdi-apple-keyboard-command</v-icon>
         </v-btn>
         <v-btn to="/profile">
           <span>我的</span>

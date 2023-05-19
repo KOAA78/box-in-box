@@ -4,8 +4,6 @@
       <img src="../assets/img/box_zone.png" />
       <div class="my-zone">
         <p>{{ zoneInfo.zoneName }}</p>
-
-        <!-- TODO：把空间管理移到这边（添加个入口按钮即可） -->
         <v-btn rounded color="brown lighten-3" dark small class="zone-btn">
           切换空间
         </v-btn>

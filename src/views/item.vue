@@ -45,40 +45,83 @@
               >基本信息</v-expansion-panel-header
             >
             <v-expansion-panel-content>
-              <v-list>
-                <v-list-item-title class="d-inline">数量</v-list-item-title>
-                <v-list-item-subtitle class="d-inline float-right"
-                  >1</v-list-item-subtitle
-                >
-              </v-list>
-              <v-list>
-                <v-list-item-title class="d-inline">价格</v-list-item-title>
-                <v-list-item-subtitle class="d-inline float-right"
-                  >79.9</v-list-item-subtitle
-                >
-              </v-list>
-              <v-list>
-                <v-list-item-title class="d-inline">种类</v-list-item-title>
-                <v-list-item-subtitle class="d-inline float-right"
-                  >衣服</v-list-item-subtitle
-                >
-              </v-list>
-              <v-list>
-                <v-list-item-title class="d-inline">标签</v-list-item-title>
-                <v-list-item-subtitle class="d-inline float-right">
-                  <v-list-item-subtitle class="d-inline float-right"
-                    >卫衣</v-list-item-subtitle
-                  >
-                </v-list-item-subtitle>
-              </v-list>
-              <v-list>
-                <v-list-item-title class="d-inline">备注</v-list-item-title>
-                <v-list-item-subtitle
-                  class="d-inline float-right"
-                ></v-list-item-subtitle>
-              </v-list>
+              <div class="row-list">
+                <div class="one-row">
+                  <v-row>
+                    <v-col cols="4" class="mt-4"> 数量 </v-col>
+                    <v-col cols="8">
+                      <v-text-field
+                        value="1"
+                        dense
+                        :disabled="disabled"
+                        reverse
+                        height="30"
+                        color="brown"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div class="one-row">
+                  <v-row>
+                    <v-col cols="4" class="mt-4"> 价格 </v-col>
+                    <v-col cols="8">
+                      <v-text-field
+                        value="279.99"
+                        dense
+                        :disabled="disabled"
+                        reverse
+                        height="30"
+                        color="brown"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div class="one-row">
+                  <v-row>
+                    <v-col cols="4" class="mt-4"> 种类 </v-col>
+                    <v-col cols="8">
+                      <v-text-field
+                        value="衣物"
+                        dense
+                        :disabled="disabled"
+                        reverse
+                        height="30"
+                        color="brown"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div class="tag-row">
+                  <v-row>
+                    <v-col cols="4" class="mt-4"> 标签 </v-col>
+                    <v-col cols="8" class="mt-1">
+                      <v-chip-group>
+                        <v-chip v-for="tag in tags" :key="tag">
+                          {{ tag }}
+                        </v-chip>
+                      </v-chip-group>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div class="one-row">
+                  <v-row>
+                    <v-col cols="4" class="mt-4"> 备注 </v-col>
+                    <v-col cols="8">
+                      <v-text-field
+                        value=""
+                        dense
+                        :disabled="disabled"
+                        reverse
+                        height="30"
+                        color="brown"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </div>
+              </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
+
           <v-expansion-panel>
             <v-expansion-panel-header
               class="brown--text font-weight-black subtitle-1"
@@ -110,18 +153,20 @@ export default {
       length: 3,
       onboarding: 0,
       panel: [0, 1],
+      disabled: false,
       paths: [
         {
-          text: "厨房",
+          text: "客厅",
         },
         {
-          text: "冰箱",
+          text: "鞋柜",
         },
       ],
       itemInfo: {
         itemImg: [],
-        itemName: "冰淇淋",
+        itemName: "鞋子",
       },
+      tags: ["安踏", "黑色", "运动鞋"],
       calendar: [
         {
           calendarId: "1",
@@ -187,4 +232,12 @@ export default {
   margin-bottom: 10px;
 }
 
+.row-list {
+  position: relative;
+  bottom: 5px;
+}
+
+.one-row {
+  height: 60px;
+}
 </style>

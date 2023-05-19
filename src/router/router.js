@@ -33,19 +33,33 @@ const routes = [
         }
     },
     {
+        path: '/zone',
+        component: () => import('../views/zone'),
+        meta: {
+            title: '我的空间'
+        },
+    },
+    {
+
+        path: '/manage',
+        component: () => import('../views/zone-list'),
+        meta: {
+            title: '空间管理'
+        },
+    },
+    {
+        path: '/manage/info/:zid',
+        component: () => import('../views/zone-info'),
+        meta: {
+            title: '空间资料'
+        },
+    },
+    {
         name: 'profile',
         path: '/profile',
         component: () => import('../views/profile'),
         meta: {
             title: '个人中心'
-        }
-    },
-    {
-        name: 'zone',
-        path: '/zone',
-        component: () => import('../views/zone'),
-        meta: {
-            title: '我的空间'
         }
     },
     {
@@ -56,6 +70,7 @@ const routes = [
             title: '容器详情'
         }
     },
+
     {
 
         path: '/item',
@@ -64,6 +79,31 @@ const routes = [
             title: '物品添加页'
         }
     },
+    {
+
+        path: '/category',
+        component: () => import('../views/category'),
+        meta: {
+            title: '种类管理'
+        }
+    },
+    {
+
+        path: '/application',
+        component: () => import('../views/application'),
+        meta: {
+            title: '应用'
+        }
+    },
+    {
+
+        path: '/search',
+        component: () => import('../views/search'),
+        meta: {
+            title: '查找物品'
+        }
+    },
+
 ]
 
 const router = new VueRouter({
