@@ -73,7 +73,7 @@ const routes = [
 
     {
 
-        path: '/item',
+        path: '/item/:id',
         component: () => import('../views/item'),
         meta: {
             title: '物品添加页'
@@ -96,11 +96,25 @@ const routes = [
         }
     },
     {
-
         path: '/search',
         component: () => import('../views/search'),
         meta: {
             title: '查找物品'
+        }
+    },
+    {
+
+        path: '/calendar',
+        component: () => import('../views/calendar'),
+        meta: {
+            title: '提醒日历'
+        }
+    },
+    {
+        path: '/scan',
+        component: () => import('../views/scan'),
+        meta: {
+            title: '条形码识别'
         }
     },
 

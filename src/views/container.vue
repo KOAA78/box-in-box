@@ -20,7 +20,9 @@
         <v-card>
           <v-card-text class="text-center">添加物品</v-card-text>
 
-          <div><v-btn text color="brown lighten-1" to="/item">手动添加</v-btn></div>
+          <div>
+            <v-btn text color="brown lighten-1" to="/item">手动添加</v-btn>
+          </div>
           <div><v-btn text color="brown lighten-1">扫码识别</v-btn></div>
           <div><v-btn text color="brown lighten-1">在线链接</v-btn></div>
         </v-card>
@@ -61,7 +63,7 @@
         <v-list rounded v-if="layer">
           <v-row class="pa-3">
             <v-col v-for="card in items" :key="card.title" :cols="6">
-              <v-card>
+              <v-card @click="enterItem(card.itemId)">
                 <v-img
                   :src="card.itemImg"
                   class="white--text align-end"
@@ -124,12 +126,12 @@ export default {
       ],
       items: [
         {
-          itemId: "",
+          itemId: "1",
           itemName: "冰淇淋",
           itemImg: "https://s2.loli.net/2023/05/11/Mn1pkWLoIVlda8j.png",
         },
         {
-          itemId: "",
+          itemId: "2",
           itemName: "土豆",
           itemImg: "https://s2.loli.net/2023/05/11/8TRMiqFdtVkaK2b.jpg",
         },
@@ -154,6 +156,9 @@ export default {
       });
     },
     getItem() {},
+    enterItem(itemId) {
+      this.$router.push(`/item/${itemId}`);
+    },
     enterChild(containerId) {
       this.$router.push({
         name: "container",

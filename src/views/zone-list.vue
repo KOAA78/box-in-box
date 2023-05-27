@@ -1,3 +1,8 @@
+<!--
+ * @Descripttion: 拥有的空间列表 
+ * @Author: Rui Lin
+ * @Date: 2023-05-19 17:07:17
+-->
 <template>
   <!-- 标题 -->
   <v-main class="page-view">
@@ -88,6 +93,7 @@
                 depressed
                 min-height="10vh"
                 class="justify-space-between"
+                @click="getZoneInfo(zone.zoneId)"
               >
                 <div class="d-flex">
                   <v-icon large color="brown darken-2" class="ml-4 mr-3"
@@ -148,12 +154,12 @@ export default {
       ],
     };
   },
-  methods:{
-    getZoneInfo(zid){
+  methods: {
+    getZoneInfo(zid) {
       this.$router.push(`/manage/info/${zid}`);
       // location.reload();
-    }
-  }
+    },
+  },
 };
 </script>
 

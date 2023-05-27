@@ -8,6 +8,9 @@
     <v-toolbar color="brown lighten-3" flat>
       <v-btn icon to="/profile"><v-icon> mdi-arrow-left </v-icon></v-btn>
       <v-toolbar-title class="bar-title">种类设置</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn text fab small><v-icon> mdi-square-edit-outline </v-icon></v-btn>
+        <v-btn text fab small><v-icon> mdi-tag-plus-outline </v-icon></v-btn>
     </v-toolbar>
     <div class="cate-main">
       <v-expansion-panels multiple>
@@ -27,16 +30,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-    <v-btn
-      elevation="5"
-      fab
-      absolute
-      color="brown lighten-3"
-      right
-      class="add-btn"
-    >
-      <v-icon color="white">mdi-plus</v-icon></v-btn
-    >
+
   </div>
 </template>
 

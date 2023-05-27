@@ -98,12 +98,7 @@ export default {
         {
           adminId: "1",
           adminImg: "",
-          adminName: "创造一",
-        },
-        {
-          adminId: "2",
-          adminImg: "",
-          adminName: "创造二",
+          adminName: "创造者",
         },
       ],
       memberList: [

@@ -19,7 +19,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-card class="mt-10">
+      <v-card class="mt-10" to="/calendar">
         <v-row>
           <v-col cols="4">
             <v-icon large class="app-icon">mdi-calendar-clock-outline</v-icon>

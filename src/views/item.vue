@@ -7,37 +7,38 @@
 <template>
   <div class="item-view">
     <v-toolbar color="brown lighten-2" flat>
+      <!-- TODO: 返回上一页页面 -->
       <v-btn icon><v-icon> mdi-arrow-left </v-icon></v-btn>
-      <v-toolbar-title class="bar-title flex text-center"
-        >物品详情</v-toolbar-title
+      <v-toolbar-title class="bar-title">物品详情</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <!-- FIX: 修改为监测数据是否变化？ -->
+      <!-- 更新资料 -->
+      <v-btn icon>
+        <v-icon>mdi-square-edit-outline</v-icon>
+      </v-btn>
+      <!-- 更新日历 -->
+      <v-btn icon @click="dialog = true"
+        ><v-icon>mdi-calendar-import-outline</v-icon></v-btn
       >
-      <!-- 修改物品资料 -->
-      <v-menu left offset-y rounded="lg">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon> mdi-cog-outline </v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <div><v-btn text color="brown lighten-1">编辑物品</v-btn></div>
-          <div><v-btn text color="brown lighten-1">删除物品</v-btn></div>
-        </v-card>
-      </v-menu>
+      <!-- 删除物品 -->
+      <v-btn icon><v-icon>mdi-trash-can-outline</v-icon></v-btn>
     </v-toolbar>
     <div class="item-main">
+      <!-- 路径 -->
+      <v-breadcrumbs :items="paths" class="pa-0 pb-2"></v-breadcrumbs>
+      <!-- 图片 -->
       <div class="item-img mt-2 mb-4">
         <v-carousel hide-delimiters height="225px">
           <v-carousel-item
-            v-for="(item, i) in items"
+            v-for="(img, i) in itemInfo.itemImg"
             :key="i"
-            :src="item.src"
+            :src="img"
           ></v-carousel-item>
         </v-carousel>
       </div>
       <div class="item-info">
-        <h3>{{ itemInfo.itemName }}</h3>
-        <!-- 路径 -->
-        <v-breadcrumbs :items="paths" class="pa-0 pb-2"></v-breadcrumbs>
+        <h3>{{itemInfo.itemName}}</h3>
+        <!-- 基本信息 -->
         <v-expansion-panels multiple v-model="panel">
           <v-expansion-panel class="ma-1">
             <v-expansion-panel-header
@@ -95,10 +96,13 @@
                   <v-row>
                     <v-col cols="4" class="mt-4"> 标签 </v-col>
                     <v-col cols="8" class="mt-1">
-                      <v-chip-group>
+                      <v-chip-group column>
                         <v-chip v-for="tag in tags" :key="tag">
                           {{ tag }}
                         </v-chip>
+                        <v-chip v-show="!disabled" outlined color="brown"
+                          ><v-icon>mdi-plus</v-icon></v-chip
+                        >
                       </v-chip-group>
                     </v-col>
                   </v-row>
@@ -136,11 +140,65 @@
                   event.calendarDate
                 }}</v-list-item-subtitle>
               </v-list>
+              <!-- 新增日历 -->
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
+    <v-dialog v-model="dialog">
+      <v-card class="pa-4">
+        <v-card-subtitle>
+          <span class="calendar-title brown--text">新增物品日历</span>
+          <v-btn icon class="float-right"><v-icon>mdi-check</v-icon></v-btn>
+        </v-card-subtitle>
+
+        <v-text-field
+          prepend-icon="mdi-alarm-light-outline"
+          placeholder="事件名称"
+        ></v-text-field>
+        <v-row>
+          <v-col>
+            <!-- 日历 -->
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :return-value.sync="date"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="date"
+                  placeholder="选择日期"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                  color="brown"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="date" no-title scrollable color="brown">
+                <v-spacer></v-spacer>
+                <v-btn text color="brown" @click="$refs.menu.save(date)">
+                  确定
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col>
+            <!-- 提醒开关 -->
+            <v-switch
+              color="orange darken-3"
+              v-model="reminder"
+              label="开启提醒"
+            ></v-switch>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
     <!-- NOTE: 增加安全距离，防止底部留白 -->
     <div style="height: 35px"></div>
   </div>
@@ -153,7 +211,7 @@ export default {
       length: 3,
       onboarding: 0,
       panel: [0, 1],
-      disabled: false,
+      disabled: true,
       paths: [
         {
           text: "客厅",
@@ -165,8 +223,14 @@ export default {
       itemInfo: {
         itemImg: [],
         itemName: "鞋子",
+        itemImg: [
+          "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+        ],
       },
-      tags: ["安踏", "黑色", "运动鞋"],
+      tags: ["xx牌", "运动鞋"],
+      dialog: false,
+      picker: new Date().toISOString().substr(0, 10),
       calendar: [
         {
           calendarId: "1",
@@ -190,16 +254,16 @@ export default {
           src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
         },
       ],
+      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
+      menu: false,
+      reminder: false,
     };
   },
   methods: {
-    next() {
-      this.onboarding =
-        this.onboarding + 1 === this.length ? 0 : this.onboarding + 1;
-    },
-    prev() {
-      this.onboarding =
-        this.onboarding - 1 < 0 ? this.length - 1 : this.onboarding - 1;
+    editItem() {
+      this.disabled = false;
     },
   },
 };
@@ -239,5 +303,12 @@ export default {
 
 .one-row {
   height: 60px;
+}
+
+.calendar-title {
+  font-size: 18px;
+  position: relative;
+  top: 8px;
+  letter-spacing: 3px;
 }
 </style>
